@@ -19,14 +19,14 @@ export const sectionPagesReducer = (store = initialStore, action) => {
                 eventsData: [...store.eventsData],
                 blogsData: [...store.blogsData],
                 products: [...store.products],
-                portfolio: [...store.portfolio, action.payload]
+                portfolio: [...action.payload]
             }
 
         case PRODUCTS_LIST_CONTROLLER:
             return {
                 eventsData: [...store.eventsData],
                 blogsData: [...store.blogsData],
-                products: [...store.products, action.payload],
+                products: [...action.payload],
                 portfolio: [...store.portfolio]
             }
 

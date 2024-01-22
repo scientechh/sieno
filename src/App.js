@@ -19,47 +19,45 @@ import {
     productsListController
 } from "./store/sectionsPages/sectionsPages.action";
 import {About} from "./pages/about/about";
+import {Helmet} from "react-helmet";
+import {Images} from "./assets/images/images";
+import logoBanner from "./assets/images/logo/scienoAcademy_banner.png";
 
 
 function App() {
     const dispatch = useDispatch()
     const productsList = useSelector(store => store.sectionPagesReducer.products)
     const portfolioList = useSelector(store => store.sectionPagesReducer.portfolio)
-
+    
     useEffect(() => {
-        try{
-            axios.get("https://scientech-8af5f-default-rtdb.firebaseio.com/about.json"
-            ).then(res => {
-                res.data?.map(el => (
-                    el.type === "product" ?
-                        dispatch(productsListController(el))
-                        :
-                        dispatch(portfolioListController(el))))
-            })
-        }catch (e) {
-            console.log(e)
-        }
-        try{
-            axios.get("https://scientech-8af5f-default-rtdb.firebaseio.com/blogs.json"
-            ).then(res => {
-                dispatch(blogsListController([...res.data]))
-            })
-        }catch (e) {
-            console.log(e)
-        }
-        try{
-            axios.get("https://scientech-8af5f-default-rtdb.firebaseio.com/events.json"
-            ).then(res => {
-                dispatch(eventsListController([...res.data]))
-            })
-        }catch (e) {
-            console.log(e)
-        }
+        axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllAbout/?type=product"
+        ).then(res => {
+            dispatch(productsListController([...res.data]))
+        })
 
+        axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllAbout/?type=portfolio"
+        ).then(res => {
+            dispatch(portfolioListController([...res.data]))
+        })
+
+        axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllBlogsEvents/?type=blog"
+        ).then(res => {
+            dispatch(blogsListController([...res.data]))
+        })
+
+        axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllBlogsEvents/?type=event"
+        ).then(res => {
+            dispatch(eventsListController([...res.data]))
+        })
     }, [])
 
   return (
       <>
+          <Helmet>
+              <meta property="og:title" content="Sieno Academy Լավագույն Ընտրությունը" />
+              <meta property="og:image" content={Images.logoBanner} />
+              <title>Sieno Academy</title>
+          </Helmet>
           <Menu/>
           <Routes>
               <Route path={"/"} element={<Home/>} />

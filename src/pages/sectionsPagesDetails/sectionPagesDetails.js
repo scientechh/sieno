@@ -1,36 +1,54 @@
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LinkIcon from '@mui/icons-material/Link';
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Slide} from "@mui/material";
 import {useParams} from "react-router";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Loader} from "../../components/loader";
 import {AllContext} from "../../utils/contaxt";
 import {Form} from "../../components/form";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import axios from "axios";
+import {blogsListController, eventsListController} from "../../store/sectionsPages/sectionsPages.action";
+import {Helmet} from "react-helmet";
 
 export const SectionPagesDetails = ({title, icon}) => {
     const [open, setOpen] = useState(false);
     const blogsList = useSelector(store => store.sectionPagesReducer.blogsData)
     const eventsList = useSelector(store => store.sectionPagesReducer.eventsData)
-    const [list] = useState([...blogsList, ...eventsList])
-    const params = useParams()
+    const [list, setList] = useState([...blogsList, ...eventsList])
     const [content, setContent] = useState({});
     const {contentConverter} = useContext(AllContext)
+    const [liked, setLiked] = useState(false)
+    const params = useParams()
     const ref = useRef()
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        setContent(list?.find(el => el.title === params.name))
-        if (localStorage.getItem("liked")){
-            const arr = JSON.parse(localStorage.getItem("liked"))
-            if (arr.find(el => el === params.name)){
-                ref.current && ref.current.classList.add("active")
+        axios.get("http://localhost:5000/users/getAllBlogsEvents/?type=blog"
+        ).then(res => {
+            if (res.data?.find(el => el._id === params.name)) {
+                setContent(res.data?.find(el => el._id === params.name))
+            }
+            dispatch(blogsListController([...res.data]))
+        })
+
+        axios.get("http://localhost:5000/users/getAllBlogsEvents/?type=event"
+        ).then(res => {
+            if (res.data?.find(el => el._id === params.name)) {
+                setContent(res.data?.find(el => el._id === params.name))
+            }
+            dispatch(eventsListController([...res.data]))
+        })
+
+        if (localStorage.getItem("likedSieno")) {
+            const arr = JSON.parse(localStorage.getItem("likedSieno"))
+            if (arr.find(el => el === params.name)) {
+                setLiked(true)
             }
         }
-    }, [list])
-
+    }, [])
 
     const copy = () => {
         setOpen(!open)
@@ -42,66 +60,71 @@ export const SectionPagesDetails = ({title, icon}) => {
 
     const like = () => {
         const element = ref.current
-        if (element.className.split(' ')[1]){
+        if (liked) {
             return
         }
+
         const spanElem = element.querySelector("span")
         const spanNum = +spanElem.innerText
         const spanPlus = spanNum + 1
         element.classList.add("active")
         spanElem.innerHTML = spanPlus
-        blogsList?.map(el => (el.title === params.name ? el.likes = spanPlus : null))
+        blogsList?.map(el => (el._id === params.name ? el.likes = spanPlus : null))
 
-        axios.put("https://scientech-8af5f-default-rtdb.firebaseio.com/blogs.json",
-            blogsList).then(res => {
-            console.log(res)
+        axios.put(process.env.REACT_APP_NODE_URL + "/users/updateBlogsEvents", {
+            _id: params.name,
+            likes: spanPlus
         })
-        if (localStorage.getItem("liked")){
-            const arr = JSON.parse(localStorage.getItem("liked"))
-            localStorage.setItem("liked", JSON.stringify([...arr, content.title]))
-        }else{
-            localStorage.setItem("liked", JSON.stringify([content.title]))
+        if (localStorage.getItem("likedSieno")) {
+            const arr = JSON.parse(localStorage.getItem("likedSieno"))
+            localStorage.setItem("likedSieno", JSON.stringify([...arr, content._id]))
+        } else {
+            localStorage.setItem("likedSieno", JSON.stringify([content._id]))
         }
     }
 
-    return(
-        content ?
-            <div className={"sectionPagesDetails container"}>
-                <h2>{icon} {title} <KeyboardArrowRightIcon/> {content.title}
-                    <LinkIcon
-                        className={"copy"}
-                        onClick={copy}
-                    />
-                </h2>
-                <section className="sectionPagesDetails__content">
-                    <div className={"imgInfo"}>
-                        <img src={content.img} alt={content.title} />
-                        <div className={"info"}>
-                            <p><CalendarMonthIcon/> {content.date}</p>
-                            {
-                                content.likes &&
+    return (
+        content?.title ?
+            <>
+                <Helmet>
+                    <meta property="og:title" content={content.title} />
+                    <meta property="og:image" content={content.img}/>
+                    <title>{content.title} / Sieno Academy</title>
+                </Helmet>
+                <div className={"sectionPagesDetails container"}>
+                    <h2>{icon} {title} <KeyboardArrowRightIcon/> {content.title}
+                        <LinkIcon
+                            className={"copy"}
+                            onClick={copy}
+                        />
+                    </h2>
+                    <section className="sectionPagesDetails__content">
+                        <div className={"imgInfo"}>
+                            <img src={content.img} alt={content.title}/>
+                            <div className={"info"}>
+                                <p><CalendarMonthIcon/> {content.date}</p>
                                 <p
-                                    className={"like"}
+                                    className={`like ${liked ? 'active' : null}`}
                                     onClick={like}
                                     ref={ref}
                                 ><FavoriteIcon/> <span>{content.likes}</span></p>
-                            }
 
+                            </div>
                         </div>
-                    </div>
-                    <div className={"sectionPagesDetails__content__text"}>
-                        {contentConverter(content.content)}
+                        <div className={"sectionPagesDetails__content__text"}>
+                            {contentConverter(content.content, [])}
 
-                        {
-                            content.haveForm && <Form title={params.name} type={content.type}/>
-                        }
-                    </div>
+                            {
+                                content.haveForm && <Form title={content.title} type={content.type}/>
+                            }
+                        </div>
 
-                </section>
-                <Slide direction="up" in={open} >
-                    <p className={"alertCopy"}>Պատճենված է</p>
-                </Slide>
-            </div>
+                    </section>
+                    <Slide direction="up" in={open}>
+                        <p className={"alertCopy"}>Պատճենված է</p>
+                    </Slide>
+                </div>
+            </>
             :
             <Loader/>
     )

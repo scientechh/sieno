@@ -26,10 +26,10 @@ export const PaginatedItems = React.memo(({ itemsPerPage, items, listName }) => 
                             key={el?.id}
                             title={el?.title}
                             poster={el?.img}
-                            about={el.about ? el.about.slice(0, 50) + "..." : null}
-                            link={`doitcenter/${listName}/${el?.title}`}
+                            about={el.about ? el.about.slice(0, 30) + "..." : el.content[0].content.slice(0, 30) + "..."}
+                            link={`/${listName}/${el?._id}`}
                         />
-                    ))
+                    )).reverse()
                 }
             </div>
         );

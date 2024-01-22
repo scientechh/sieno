@@ -4,68 +4,66 @@ import {useForm} from "react-hook-form";
 import {useRef, useState} from "react";
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import emailjs from "@emailjs/browser";
-
+import {Alert, Button, createTheme, InputAdornment, LinearProgress, TextField} from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import axios from "axios";
 
 export const Form = ({ title,  type }) => {
-    const { register, handleSubmit  } = useForm();
-    const [phoneNumber, setPhoneNumber] = useState("")
+    const { register, handleSubmit, reset  } = useForm();
     const [isSend, setIsSend] = useState(false)
-    const date = new Date()
+    const [loading, setLoading] = useState(false)
     const form = useRef()
 
-    const Submit = () => {
-        emailjs.sendForm('service_eyhh1qs', 'template_c5i9a3f', form.current, 'qc9wYSvl8s8uYAkVt')
-            .then((result) => {
+    const Submit = (data) => {
+        setLoading(true)
+        axios.post('http://localhost:5000/users/sendGmail', {
+            surname: data.surname,
+            name: data.name,
+            email: data.email,
+            title: title,
+            phone: data.phone,
+            type: type,
+            more: data.moreInfo
+        }).then(r => {
+            if (r.data.accepted[0] === data.email){
+                setLoading(false)
                 setIsSend(true)
-            }, (error) => {
-                console.log(error.text);
-            })
+                reset()
+            }
+        })
     }
 
     return(
         <form onSubmit={handleSubmit(Submit)} ref={form}>
             <div className={"form"}>
                 <div className={"form__left"}>
-                    <div>
-                        <label htmlFor="name">Անուն</label>
-                        <input type="text" id={"name"} {...register("name")} required/>
-                    </div>
-                    <div>
-                        <label htmlFor="surname">Ազգանուն</label>
-                        <input type="text" id={"surname"} {...register("surname")} required/>
-                    </div>
+                    <TextField id="standard-basic" label="Անուն" variant="standard" {...register("name")} required/>
+                    <TextField id="standard-basic" label="Ազգանուն" variant="standard" {...register("surname")} required/>
                 </div>
 
                 <div>
-                    <div>
-                        <label htmlFor="email">Էլ․ Հասցե</label>
-                        <input type="email" id={"email"} {...register("email")} required/>
-                    </div>
-                    <div>
-                        <label>Հեռ․</label>
-                        <PhoneInput
-                            country={'am'}
-                            regions={'asia'}
-                            value={phoneNumber}
-                            onChange={e => setPhoneNumber(e)}
-                        />
-                        <input type="text" name={"phone"} value={phoneNumber} style={{display: "none"}}/>
-                        <input type="text" name={"title"} value={title} style={{display: "none"}}/>
-                        <input type="text" name={"type"} value={type} style={{display: "none"}}/>
-                        <input type="text" name={"date"} value={`${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}`} style={{display: "none"}}/>
-                    </div>
+                    <TextField id="standard-basic" label="Էլ․ Հասցե" variant="standard" {...register("email")} required/>
+                    <TextField id="standard-basic" label="Հեռախոսահամար" variant="standard" {...register("phone")} required/>
                 </div>
 
                 <div>
-                    <label htmlFor="more">Այլ Տվյալներ</label>
-                    <textarea id="more" name={"more"} {...register("moreInfo")}/>
+                    <TextField
+                        id="standard-multiline-static"
+                        label="Այլ Տվյալներ"
+                        multiline
+                        rows={4}
+                        variant="standard"
+                        sx={{color: '#8504d6'}}
+                        {...register("moreInfo")}
+                    />
                 </div>
             </div>
-            {isSend ? <b>Ուղարկված է</b> : ""}
-            <button>
-                <DoneAllIcon/>
-                Հաստատել
-            </button>
+            {
+                loading ? <LinearProgress /> : null
+            }
+
+            {isSend ? <Alert severity="success" className={'alertSend'}>Ձեր Հայտը Ուղարկված է</Alert> : null}
+            <Button variant="contained" className={'sendButton'} type={"submit"}><DoneAllIcon/> Հաստատել</Button>
         </form>
     )
 }

@@ -24,13 +24,13 @@ export const Home = () => {
                 id={el.id}
                 key={el.id}
                 title={el.title}
-                link={`doitcenter/${type === "b" ? "blog" : "event"}/${el.title}`}
+                link={`/${type === "b" ? "blog" : "event"}/${el._id}`}
                 poster={el.img}
-                about={type === "b" ? el.about.slice(0, 50) + "..." : null}
+                about={type === "b" ? el.about.slice(0, 30) + "..." : el.content[0].content.slice(0, 30) + "..."}
                 onDragStart={handleDragStart} role="presentation"
             />
         )))
-        return arr
+        return arr.reverse()
     }
 
     return(
@@ -41,10 +41,10 @@ export const Home = () => {
                     <Section
                         title={"Իրադարձություններ"}
                         cardItems={[...cardConvert(eventsList, "e").slice(0, 5),
-                            (eventsList.length > 5) && <More link={"doitcenter/events/1"}/>]}
+                            (eventsList.length > 5) && <More link={"/events/1"}/>]}
                     />
                     <Section title={"Բլոգ"} cardItems={[...cardConvert(blogsList, "b").slice(0, 5),
-                        (blogsList.length > 5) && <More link={"doitcenter/blogs/1"}/>]}/>
+                        (blogsList.length > 5) && <More link={"/blogs/1"}/>]}/>
                 </div>
             </div>
             :

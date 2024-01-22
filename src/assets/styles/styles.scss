@@ -21,6 +21,48 @@ button{
   cursor: pointer;
 }
 
+.css-v4u5dn-MuiInputBase-root-MuiInput-root:after, .css-1rb63tl-MuiInputBase-root-MuiInput-root:after{
+  border-color: $purple !important;
+}
+
+.css-1c2i806-MuiFormLabel-root-MuiInputLabel-root.Mui-focused{
+  color: $purple !important;
+}
+
+.css-eglki6-MuiLinearProgress-root{
+  background-color: #d9bff1 !important;
+  margin-top: 20px;
+  span{
+    background-color: $purple !important;
+  }
+}
+
+.alertSend{
+  max-width: 300px;
+  margin-top: 10px;
+}
+
+.sendButton {
+  background: $purple !important;
+  padding: 7px 15px !important;
+  align-self: end !important;
+  color: $white;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 8px !important;
+  margin: 15px 0 0 auto !important;
+  box-shadow: none !important;
+  svg{
+    width: 20px;
+    height: 20px;
+    path{
+      color: $white;
+    }
+  }
+}
+
+
 .flexCenter {
   display: flex;
   align-items: center;
@@ -193,7 +235,6 @@ button{
   }
 }
 
-// ---- menu
 .menu{
   position: fixed;
   width: 100%;
@@ -247,7 +288,7 @@ button{
         position: absolute;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 5px;
         background: $white;
         padding: 10px;
         left: -10px;
@@ -260,6 +301,10 @@ button{
           border-radius: 10px;
           &:hover{
             color: $purple;
+          }
+          &:before{
+            width: 0 !important;
+            height: 0 !important;
           }
         }
       }
@@ -299,9 +344,7 @@ button{
     }
   }
 }
-// ---- menu end
 
-// ---- home
 .header{
   height: 100vh;
   display: flex;
@@ -464,6 +507,16 @@ button{
   }
   &__main{
     padding: 15px 0;
+    display: flex;
+    overflow-x: scroll;
+    gap: 25px;
+    &::-webkit-scrollbar{
+      height: 4px;
+      background: #eee;
+      &-thumb{
+        background: $purple;
+      }
+    }
   }
 }
 
@@ -536,7 +589,6 @@ button{
     opacity: 0.1;
   }
 }
-// ---- home end
 
 .sectionPages {
   padding-top: 120px;
@@ -653,6 +705,7 @@ button{
         justify-content: flex-start;
         gap: 30px;
         margin-top: 10px;
+        margin-bottom: 15px;
         svg{
           width: 25px;
           height: 25px;
@@ -692,6 +745,11 @@ button{
 
     &__text{
       margin-bottom: 20px;
+      img{
+        width: 90%;
+        max-width: 500px;
+        margin: 10px 0;
+      }
     }
 
     h1 {
@@ -709,7 +767,7 @@ button{
     p {
       font-size: 16px;
       line-height: 23px;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       &::first-letter {
         text-transform: uppercase;
       }
@@ -758,6 +816,8 @@ button{
     }
   }
   form{
+    display: flex;
+    flex-direction: column;
     .form{
       display: flex;
       align-items: flex-start;
@@ -766,11 +826,8 @@ button{
       border-top: 2px solid $gray;
       padding-top: 30px;
       gap: 20px;
-
-      input, textarea, .flag-dropdown {
-        border: 1px solid $black;
-        border-radius: 5px;
-        outline: none;
+      input, textarea {
+        width: 300px;
         &:focus{
           border-color: $purple;
           background: $gray;
@@ -780,31 +837,31 @@ button{
         width: 300px;
         height: 100%;
         &:last-child{
-          margin-top: 15px;
+          margin-top: 0;
         }
-        textarea{
-          width: 100%;
-          height: 109px;
-          margin-top: 7px;
-          padding: 10px;
-          box-sizing: border-box;
-          resize: none;
-        }
+        //textarea{
+        //  width: 100%;
+        //  height: 109px;
+        //  margin-top: 7px;
+        //  padding: 10px;
+        //  box-sizing: border-box;
+        //  resize: none;
+        //}
         & > div{
           display: flex;
           flex-direction: column;
           align-items: flex-start;
           width: 100%;
           gap: 7px;
-          margin-top: 15px;
-          input{
-            width: 100%;
-            box-sizing: border-box;
-            padding: 7px 10px;
-            &:not(:last-child){
-              padding: 0 0 0 48px;
-            }
-          }
+          margin-top: 19px;
+          //input{
+          //  width: 100%;
+          //  box-sizing: border-box;
+          //  padding: 7px 10px;
+          //  &:not(:last-child){
+          //    padding: 0 0 0 48px;
+          //  }
+          //}
         }
       }
     }
@@ -819,27 +876,6 @@ button{
       button{
         width: 100%;
         justify-content: center;
-      }
-    }
-    button {
-      background: $purple;
-      border: none;
-      padding: 9px 15px;
-      align-self: end;
-      color: $white;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: 15px 0 0 auto;
-      svg{
-        width: 20px;
-        height: 20px;
-        path{
-          color: $white;
-        }
       }
     }
   }
@@ -866,7 +902,8 @@ button{
     margin-top: 30px;
   }
   &__details{
-    width: 500px;
+    max-width: 500px;
+    width: 95%;
     padding: 20px;
     box-sizing: border-box;
     .closeBtn{
@@ -975,6 +1012,12 @@ button{
       font-size: 14px;
       &:hover{
         background: $purple;
+        color: #fff;
+        svg{
+          path{
+            color: #fff;
+          }
+        }
       }
     }
   }
@@ -985,36 +1028,6 @@ button{
     width: 90%;
     max-width: 500px;
     gap: 20px;
-    input, textarea{
-      padding: 9px 10px;
-      border: 1px solid $black;
-      width: 100%;
-      box-sizing: border-box;
-      border-radius: 5px;
-    }
-    textarea{
-      height: 130px;
-      resize: none;
-    }
-    button{
-      background: $purple;
-      border: none;
-      padding: 9px 15px;
-      align-self: end;
-      color: $white;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      border-radius: 5px;
-      svg{
-        width: 20px;
-        height: 20px;
-        path{
-          color: $white;
-        }
-      }
-    }
   }
 }
 

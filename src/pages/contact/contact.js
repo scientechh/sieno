@@ -7,20 +7,28 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import {useForm} from "react-hook-form";
 import emailjs from '@emailjs/browser';
 import {useRef, useState} from "react";
+import {Alert, Button, LinearProgress, TextField} from "@mui/material";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import axios from "axios";
 
 
 export const Contact = () => {
-    const { register, handleSubmit} = useForm();
+    const { register, handleSubmit, reset} = useForm();
     const [isSend, setIsSend] = useState(false)
+    const [loading, setLoading] = useState(false)
     const form = useRef();
 
-    const onSubmit = () => {
-        emailjs.sendForm('service_eyhh1qs', 'template_lzyu41t', form.current, 'qc9wYSvl8s8uYAkVt')
-            .then((result) => {
-                setIsSend(true)
-            }, (error) => {
-                console.log(error.text);
-            })
+    const onSubmit = (data) => {
+        setLoading(true)
+        axios.post(process.env.REACT_APP_NODE_URL + '/users/sendContactMess', {
+            name: data.name,
+            email: data.email,
+            message: data.message
+        }).then(r => {
+            setLoading(false)
+            setIsSend(true)
+            reset()
+        })
     };
 
     return(
@@ -31,7 +39,7 @@ export const Contact = () => {
                 <div className={"contact__info"}>
                     <p>
                         <span><MailOutlineIcon/> Էլ․ Հասցե</span>
-                        scientech.itcompany@gmail.com
+                        sienoacademy@gmail.com
                     </p>
                     <p>
                         <span><PhoneEnabledIcon/> Հեռ․</span>
@@ -44,11 +52,23 @@ export const Contact = () => {
                 </div>
 
                 <form ref={form} onSubmit={handleSubmit(onSubmit)}>
-                    <input placeholder={"Անուն"} name={"name"} {...register("name", { required: true })} />
-                    <input placeholder={"Էլ․ Հասցե"} name={"email"} {...register("email", { required: true })} />
-                    <textarea placeholder={"Նամակ"} name={"message"} {...register("message", { required: true })}/>
-                    {isSend ? <b>Ուղարկված է</b> : ""}
-                    <button>Ուղարկել <SendIcon/></button>
+                    <TextField id="standard-basic"
+                               style={{width: '100%'}}
+                               label="Անուն" variant="standard" {...register("name")} required />
+                    <TextField
+                        style={{width: '100%'}}
+                        id="standard-basic" label="Էլ․ Հասցե" variant="standard" {...register("email")} required/>
+                    <TextField id="standard-multiline-static"
+                               style={{width: '100%'}}
+                               multiline
+                               rows={4} label="Նամակ" variant="standard" {...register("message")} required/>
+
+                    {
+                        loading ? <LinearProgress /> : null
+                    }
+                    {isSend ? <Alert severity="success" className={'alertSend'}>Ուղարկված է</Alert> : null}
+
+                    <Button variant="contained" className={'sendButton'} type={'submit'}>Ուղարկել <SendIcon/></Button>
                 </form>
             </div>
         </div>
