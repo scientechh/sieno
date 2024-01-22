@@ -28,8 +28,10 @@ function App() {
     const dispatch = useDispatch()
     const productsList = useSelector(store => store.sectionPagesReducer.products)
     const portfolioList = useSelector(store => store.sectionPagesReducer.portfolio)
-    
+
     useEffect(() => {
+        axios.defaults.withCredentials = true
+
         axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllAbout/?type=product"
         ).then(res => {
             dispatch(productsListController([...res.data]))
