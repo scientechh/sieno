@@ -76,6 +76,8 @@ export const SectionPagesDetails = ({title, icon}) => {
         axios.put(process.env.REACT_APP_NODE_URL + "/users/updateBlogsEvents", {
             _id: params.name,
             likes: spanPlus
+        }).then(r => {
+            console.log(r)
         })
         if (localStorage.getItem("likedSieno")) {
             const arr = JSON.parse(localStorage.getItem("likedSieno"))
