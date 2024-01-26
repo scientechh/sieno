@@ -65,7 +65,7 @@ export const SectionPagesDetails = ({title, icon}) => {
 
     const like = () => {
         const element = ref.current
-        if (liked) {
+        if (element.className.split(' ')[1] === 'active') {
             return
         }
 
@@ -79,8 +79,6 @@ export const SectionPagesDetails = ({title, icon}) => {
         axios.put(process.env.REACT_APP_NODE_URL + "/users/updateBlogsEvents", {
             _id: params.name,
             likes: spanPlus
-        }).then(r => {
-            console.log(r)
         })
 
         if (cookies.likedSieno) {
@@ -112,7 +110,7 @@ export const SectionPagesDetails = ({title, icon}) => {
                             <div className={"info"}>
                                 <p><CalendarMonthIcon/> {content.date}</p>
                                 <p
-                                    className={`like ${liked ? 'active' : null}`}
+                                    className={`like ${liked ? 'active' : ''}`}
                                     onClick={like}
                                     ref={ref}
                                 ><FavoriteIcon/> <span>{content.likes}</span></p>
