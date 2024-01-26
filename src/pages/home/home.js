@@ -26,7 +26,7 @@ export const Home = () => {
                 title={el.title}
                 link={`/${type === "b" ? "blog" : "event"}/${el._id}`}
                 poster={el.img}
-                about={type === "b" ? el.about.slice(0, 30) + "..." : el.content[0].content.slice(0, 30) + "..."}
+                about={el.content[0].content.slice(0, 30) + "..."}
                 onDragStart={handleDragStart} role="presentation"
             />
         )))
