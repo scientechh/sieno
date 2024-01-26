@@ -26,7 +26,9 @@ export const SectionPagesDetails = ({title, icon}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        axios.get("http://localhost:5000/users/getAllBlogsEvents/?type=blog"
+        window.scrollTo(0, 0)
+
+        axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllBlogsEvents/?type=blog"
         ).then(res => {
             if (res.data?.find(el => el._id === params.name)) {
                 setContent(res.data?.find(el => el._id === params.name))
@@ -34,7 +36,7 @@ export const SectionPagesDetails = ({title, icon}) => {
             dispatch(blogsListController([...res.data]))
         })
 
-        axios.get("http://localhost:5000/users/getAllBlogsEvents/?type=event"
+        axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllBlogsEvents/?type=event"
         ).then(res => {
             if (res.data?.find(el => el._id === params.name)) {
                 setContent(res.data?.find(el => el._id === params.name))
