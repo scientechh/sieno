@@ -146,7 +146,7 @@ button{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 300px;
+  min-width: 300px;
   height: 315px;
   border-bottom-right-radius: 20px;
   border-top-left-radius: 20px;
@@ -154,6 +154,8 @@ button{
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   img{
     width: 100%;
+    object-fit: cover;
+    height: 170px;
   }
   &__text{
     height: 50%;
