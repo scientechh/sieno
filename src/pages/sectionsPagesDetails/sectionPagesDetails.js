@@ -12,6 +12,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import axios from "axios";
 import {blogsListController, eventsListController} from "../../store/sectionsPages/sectionsPages.action";
 import {Helmet} from "react-helmet";
+import {useCookies} from "react-cookie";
 
 export const SectionPagesDetails = ({title, icon}) => {
     const [open, setOpen] = useState(false);
@@ -24,6 +25,8 @@ export const SectionPagesDetails = ({title, icon}) => {
     const params = useParams()
     const ref = useRef()
     const dispatch = useDispatch()
+    const [cookies, setCookie] = useCookies(['likedSieno']);
+
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -44,8 +47,8 @@ export const SectionPagesDetails = ({title, icon}) => {
             dispatch(eventsListController([...res.data]))
         })
 
-        if (localStorage.getItem("likedSieno")) {
-            const arr = JSON.parse(localStorage.getItem("likedSieno"))
+        if (cookies.likedSieno) {
+            const arr = cookies.likedSieno
             if (arr.find(el => el === params.name)) {
                 setLiked(true)
             }
@@ -79,11 +82,12 @@ export const SectionPagesDetails = ({title, icon}) => {
         }).then(r => {
             console.log(r)
         })
-        if (localStorage.getItem("likedSieno")) {
-            const arr = JSON.parse(localStorage.getItem("likedSieno"))
-            localStorage.setItem("likedSieno", JSON.stringify([...arr, content._id]))
+
+        if (cookies.likedSieno) {
+            const arr = cookies.likedSieno
+            setCookie("likedSieno", JSON.stringify([...arr, content._id]))
         } else {
-            localStorage.setItem("likedSieno", JSON.stringify([content._id]))
+            setCookie("likedSieno", JSON.stringify([content._id]))
         }
     }
 
