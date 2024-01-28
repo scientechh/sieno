@@ -16,7 +16,7 @@ export const Form = ({ title,  type }) => {
 
     const Submit = (data) => {
         setLoading(true)
-        axios.post('http://localhost:5000/users/sendGmail', {
+        axios.post(process.env.REACT_APP_NODE_URL + '/users/sendGmail', {
             surname: data.surname,
             name: data.name,
             email: data.email,
