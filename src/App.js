@@ -64,7 +64,7 @@ function App() {
         <>
           <Helmet>
               <meta property="og:title" content="Sieno Academy Լավագույն Ընտրությունը" />
-              <meta property="og:image" content={window.location.origin}"/"{Images.logoBanner} />
+              <meta property="og:image" content={`${window.location.origin}/${Images.logoBanner}`} />
               <meta property="og:url" content={window.location.href}/>
               <title>Sieno Academy</title>
           </Helmet>

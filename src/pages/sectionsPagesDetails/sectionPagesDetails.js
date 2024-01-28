@@ -13,6 +13,7 @@ import axios from "axios";
 import {blogsListController, eventsListController} from "../../store/sectionsPages/sectionsPages.action";
 import {Helmet} from "react-helmet";
 import {useCookies} from "react-cookie";
+import {Images} from "../../assets/images/images";
 
 export const SectionPagesDetails = ({title, icon}) => {
     const [open, setOpen] = useState(false);
@@ -94,7 +95,7 @@ export const SectionPagesDetails = ({title, icon}) => {
             <>
                 <Helmet>
                     <meta property="og:title" content={content.title} />
-                    <meta property="og:image" content={window.location.origin}"/"{content.img}/>
+                    <meta property="og:image" content={`${window.location.origin}/${content.img}`}/>
                     <meta property="og:url" content={window.location.href}/>
                     <title>{content.title} / Sieno Academy</title>
                 </Helmet>
