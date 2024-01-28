@@ -33,31 +33,32 @@ function App() {
 
     useEffect(() => {
         axios.defaults.withCredentials = true
+        AllRequests()
+    }, [])
 
-        axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllAbout/?type=product"
+    const AllRequests = async () => {
+        await axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllAbout/?type=product"
         ).then(res => {
             dispatch(productsListController([...res.data]))
-            setLoading('')
         })
 
-        axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllAbout/?type=portfolio"
+        await axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllAbout/?type=portfolio"
         ).then(res => {
             dispatch(portfolioListController([...res.data]))
-            setLoading('')
         })
 
-        axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllBlogsEvents/?type=blog"
+        await axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllBlogsEvents/?type=blog"
         ).then(res => {
             dispatch(blogsListController([...res.data]))
-            setLoading('')
         })
 
-        axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllBlogsEvents/?type=event"
+        await axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllBlogsEvents/?type=event"
         ).then(res => {
             dispatch(eventsListController([...res.data]))
-            setLoading(true)
         })
-    }, [])
+
+        setLoading(true)
+    }
 
   return (
       loading ?
