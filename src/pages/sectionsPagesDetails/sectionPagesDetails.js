@@ -94,7 +94,8 @@ export const SectionPagesDetails = ({title, icon}) => {
             <>
                 <Helmet>
                     <meta property="og:title" content={content.title} />
-                    <meta property="og:image" content={content.img}/>
+                    <meta property="og:image" content={window.location.origin}"/"{content.img}/>
+                    <meta property="og:url" content={window.location.href}/>
                     <title>{content.title} / Sieno Academy</title>
                 </Helmet>
                 <div className={"sectionPagesDetails container"}>
