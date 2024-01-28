@@ -4,7 +4,7 @@ import {Menu} from "./components/menu";
 import {SectionsPages} from "./pages/sectionsPages/sectionsPages";
 import {Footer} from "./components/footer";
 import EventIcon from "@mui/icons-material/Event";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import FeedIcon from '@mui/icons-material/Feed';
 import {SectionPagesDetails} from "./pages/sectionsPagesDetails/sectionPagesDetails";
 import {Works} from "./pages/works/works";
@@ -22,12 +22,14 @@ import {About} from "./pages/about/about";
 import {Helmet} from "react-helmet";
 import {Images} from "./assets/images/images";
 import logoBanner from "./assets/images/logo/scienoAcademy_banner.png";
+import {Loader} from "./components/loader";
 
 
 function App() {
     const dispatch = useDispatch()
     const productsList = useSelector(store => store.sectionPagesReducer.products)
     const portfolioList = useSelector(store => store.sectionPagesReducer.portfolio)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         axios.defaults.withCredentials = true
@@ -35,26 +37,31 @@ function App() {
         axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllAbout/?type=product"
         ).then(res => {
             dispatch(productsListController([...res.data]))
+            setLoading('')
         })
 
         axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllAbout/?type=portfolio"
         ).then(res => {
             dispatch(portfolioListController([...res.data]))
+            setLoading('')
         })
 
         axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllBlogsEvents/?type=blog"
         ).then(res => {
             dispatch(blogsListController([...res.data]))
+            setLoading('')
         })
 
         axios.get(process.env.REACT_APP_NODE_URL + "/users/getAllBlogsEvents/?type=event"
         ).then(res => {
             dispatch(eventsListController([...res.data]))
+            setLoading(true)
         })
     }, [])
 
   return (
-      <>
+      loading ?
+        <>
           <Helmet>
               <meta property="og:title" content="Sieno Academy Լավագույն Ընտրությունը" />
               <meta property="og:image" content={Images.logoBanner} />
@@ -93,6 +100,8 @@ function App() {
           </Routes>
           <Footer/>
       </>
+          :
+          <Loader/>
   );
 }
 
