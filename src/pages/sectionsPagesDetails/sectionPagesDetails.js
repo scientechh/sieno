@@ -99,16 +99,16 @@ export const SectionPagesDetails = ({title, icon}) => {
                     <meta property="og:url" content={window.location.href}/>
                     <title>{content.title} / Sieno Academy</title>
                 </Helmet>
-                <div className={"sectionPagesDetails container"}>
-                    <h2>{icon} {title} <KeyboardArrowRightIcon/> {content.title}
-                        <LinkIcon
-                            className={"copy"}
-                            onClick={copy}
-                        />
-                    </h2>
-                    <section className="sectionPagesDetails__content">
+                <div className={"sectionPagesDetails"}>
+                    <img className={'sectionPagesDetails_img'} src={content.img} alt={content.title}/>
+                    <section className="sectionPagesDetails__content container">
+                        <h2>{icon} {title} <KeyboardArrowRightIcon/> {content.title}
+                            <LinkIcon
+                                className={"copy"}
+                                onClick={copy}
+                            />
+                        </h2>
                         <div className={"imgInfo"}>
-                            <img src={content.img} alt={content.title}/>
                             <div className={"info"}>
                                 <p><CalendarMonthIcon/> {content.date}</p>
                                 <p

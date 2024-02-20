@@ -29,11 +29,11 @@ function App() {
     const dispatch = useDispatch()
     const productsList = useSelector(store => store.sectionPagesReducer.products)
     const portfolioList = useSelector(store => store.sectionPagesReducer.portfolio)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         axios.defaults.withCredentials = true
-        AllRequests()
+        // AllRequests()
     }, [])
 
     const AllRequests = async () => {

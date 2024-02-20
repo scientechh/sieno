@@ -1,29 +1,30 @@
 import {Images} from "../assets/images/images";
 import {Link} from "react-router-dom";
+import EastIcon from "@mui/icons-material/East";
+import {Cricle} from "./cricle";
 
 
 export const Footer = () => {
+    const footerYear = new Date().getFullYear()
 
     return(
-        <div className="footer">
-            <div className={"container"}>
-                <img src={Images.logo} alt="logo"/>
-                <div className="footer__lists">
-                    <ul>
-                        <li><Link to={"/"}>Գլխավոր</Link></li>
-                        <li><Link to={"/blogs/1"}>Բլոգ</Link></li>
-                        <li><Link to={"/events/1"}>Իրադարձություններ</Link></li>
-                        <li><Link to={"/contacts"}>Կապ</Link></li>
-                    </ul>
-                    <ul>
-                        <li><Link to={"/about"}>Մեր Մասին</Link></li>
-                        <li><Link to={"/portfolio"}>Պորտֆոլիո</Link></li>
-                        <li><Link to={"/products"}>Պրոդուկտներ</Link></li>
-                    </ul>
+        <div className={'footer'}>
+            <Cricle color={'rgb(242, 94, 255)'}/>
+            <div className="container">
+                <div className="footer__bottom">
+                    <div className="footer__bottom__logos">
+                        <img src={Images.logoW} alt=""/>
+                    </div>
+                    <div className={'footer__bottom__links'}>
+                        <Link to={''}>Գլխավոր</Link>
+                        <Link to={''}>Բլոգներ</Link>
+                        <Link to={''}>Իրադարձություններ</Link>
+                        <Link to={''}>Պրոդուկտներ</Link>
+                    </div>
                 </div>
+
+                <b>Sieno Academy - {footerYear}</b>
             </div>
-            <hr/>
-                <span>Sieno Academy - {new Date().getFullYear()}</span>
         </div>
     )
 }
