@@ -29,7 +29,7 @@ function App() {
     const dispatch = useDispatch()
     const productsList = useSelector(store => store.sectionPagesReducer.products)
     const portfolioList = useSelector(store => store.sectionPagesReducer.portfolio)
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState()
 
     useEffect(() => {
         axios.defaults.withCredentials = true
