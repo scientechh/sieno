@@ -33,7 +33,7 @@ function App() {
 
     useEffect(() => {
         axios.defaults.withCredentials = true
-        // AllRequests()
+        AllRequests()
     }, [])
 
     const AllRequests = async () => {
